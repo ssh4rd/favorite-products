@@ -21,6 +21,102 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
+## Launching the Application
+
+This application can be launched using Docker and Docker Compose. Follow these steps to get started:
+
+### Prerequisites
+
+- Docker and Docker Compose installed on your system
+- Make sure ports 8000 (web), 3306 (MySQL), and 6379 (Redis) are available
+
+### Quick Start
+
+The application is already configured and ready to run. Simply execute:
+
+```bash
+make up
+```
+
+This will start all Docker services and make the application available at **http://localhost:8000**.
+
+### First-Time Setup (if needed)
+
+If this is your first time running the application or you want a completely fresh start:
+
+1. **Clone the repository and navigate to the project directory:**
+   ```bash
+   git clone https://github.com/yourusername/favorite-products.git
+   cd favorite-products
+   ```
+
+2. **Copy the environment file:**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+3. **Launch the application with fresh setup:**
+   ```bash
+   make fresh
+   ```
+
+   This command will:
+   - Clean up any existing containers
+   - Build the Docker images
+   - Start all services (app, nginx, MySQL, Redis)
+   - Install PHP and Node.js dependencies
+   - Run database migrations
+
+### Access Points
+
+- **Web Application:** http://localhost:8000
+- **Database:** localhost:3306 (user: `favorite_user`, password: `favorite_password`)
+- **Redis:** localhost:6379
+
+### Available Make Commands
+
+- `make help` - Show all available commands
+- `make up` - Start all services
+- `make down` - Stop all services
+- `make build` - Build Docker images
+- `make install` - Install dependencies
+- `make migrate` - Run database migrations
+- `make seed` - Seed the database
+- `make test` - Run tests
+- `make logs` - Show logs from all services
+- `make shell` - Access the app container shell
+- `make clean` - Remove all containers and volumes
+- `make fresh` - Complete fresh start
+
+### Manual Setup (Alternative)
+
+If you prefer not to use Docker:
+
+1. **Install dependencies:**
+   ```bash
+   composer install
+   npm install
+   ```
+
+2. **Set up the environment:**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+3. **Set up the database:**
+   Configure your `.env` file with database credentials and run:
+   ```bash
+   php artisan migrate
+   ```
+
+4. **Start the development servers:**
+   ```bash
+   php artisan serve
+   npm run dev
+   ```
+
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.

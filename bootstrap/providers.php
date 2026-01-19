@@ -2,6 +2,7 @@
 
 return [
     App\Providers\AppServiceProvider::class,
+    Illuminate\View\ViewServiceProvider::class,
     Illuminate\Auth\AuthServiceProvider::class,
     Illuminate\Broadcasting\BroadcastServiceProvider::class,
     Illuminate\Bus\BusServiceProvider::class,
@@ -23,5 +24,4 @@ return [
     Illuminate\Session\SessionServiceProvider::class,
     Illuminate\Translation\TranslationServiceProvider::class,
     Illuminate\Validation\ValidationServiceProvider::class,
-    Illuminate\View\ViewServiceProvider::class,
 ];

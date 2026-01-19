@@ -33,16 +33,8 @@
                                 }
                             }
                         }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
                     }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
+                }
             },
             "post": {
                 "tags": [
@@ -72,18 +64,10 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
                     "422": {
                         "description": "Validation error"
                     }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
+                }
             }
         },
         "/api/lists/{id}": {
@@ -118,16 +102,8 @@
                     },
                     "404": {
                         "description": "List not found"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
                     }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
+                }
             },
             "put": {
                 "tags": [
@@ -171,18 +147,10 @@
                     "404": {
                         "description": "List not found"
                     },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
                     "422": {
                         "description": "Validation error"
                     }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
+                }
             },
             "delete": {
                 "tags": [
@@ -221,16 +189,8 @@
                     },
                     "404": {
                         "description": "List not found"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
                     }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
+                }
             }
         },
         "/api/lists/{listId}/products": {
@@ -276,18 +236,10 @@
                     "404": {
                         "description": "List not found"
                     },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
                     "422": {
                         "description": "Validation error"
                     }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
+                }
             }
         },
         "/api/lists/{listId}/products/{sku}": {
@@ -337,16 +289,8 @@
                     },
                     "404": {
                         "description": "List or product not found"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
                     }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
+                }
             }
         }
     },
@@ -508,14 +452,6 @@
                         }
                     }
                 }
-            }
-        },
-        "securitySchemes": {
-            "sanctum": {
-                "type": "apiKey",
-                "description": "Enter token in format (Bearer <token>)",
-                "name": "Authorization",
-                "in": "header"
             }
         }
     },

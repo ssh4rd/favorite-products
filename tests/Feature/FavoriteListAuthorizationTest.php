@@ -76,11 +76,13 @@ class FavoriteListAuthorizationTest extends TestCase
                 ]);
     }
 
-    public function test_user_cannot_access_lists_without_authentication()
+    public function test_user_can_access_lists_without_authentication()
     {
         $response = $this->getJson('/api/lists');
 
-        $response->assertStatus(401);
+        $response->assertStatus(200);
+        // Should create a user and set cookie
+        $response->assertCookie('auth_token');
     }
 
     public function test_user_cannot_access_lists_with_invalid_token()

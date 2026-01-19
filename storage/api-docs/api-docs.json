@@ -33,8 +33,16 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ]
             },
             "post": {
                 "tags": [
@@ -64,10 +72,18 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
                     "422": {
                         "description": "Validation error"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ]
             }
         },
         "/api/lists/{id}": {
@@ -102,8 +118,16 @@
                     },
                     "404": {
                         "description": "List not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ]
             },
             "put": {
                 "tags": [
@@ -147,10 +171,18 @@
                     "404": {
                         "description": "List not found"
                     },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
                     "422": {
                         "description": "Validation error"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ]
             },
             "delete": {
                 "tags": [
@@ -189,8 +221,16 @@
                     },
                     "404": {
                         "description": "List not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ]
             }
         },
         "/api/lists/{listId}/products": {
@@ -236,10 +276,18 @@
                     "404": {
                         "description": "List not found"
                     },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
                     "422": {
                         "description": "Validation error"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ]
             }
         },
         "/api/lists/{listId}/products/{sku}": {
@@ -289,8 +337,16 @@
                     },
                     "404": {
                         "description": "List or product not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ]
             }
         }
     },
@@ -452,6 +508,14 @@
                         }
                     }
                 }
+            }
+        },
+        "securitySchemes": {
+            "cookieAuth": {
+                "type": "apiKey",
+                "description": "Cookie-based authentication using auth_token cookie",
+                "name": "auth_token",
+                "in": "cookie"
             }
         }
     },

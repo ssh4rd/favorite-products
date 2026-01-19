@@ -28,18 +28,32 @@ class SimpleAuth
             if (str_starts_with($token, 'test-token-')) {
                 $userId = (int) str_replace('test-token-', '', $token);
                 $user = User::find($userId);
+                if (!$user) {
+                    return response()->json(['message' => 'Unauthorized'], 401);
+                }
+            } else {
+                // Invalid Bearer token
+                return response()->json(['message' => 'Unauthorized'], 401);
             }
-        }
+        } else {
+            // No Bearer token - use cookie-based authentication
+            $token = $request->cookie('auth_token');
 
-        // Fall back to cookie-based authentication
-        if (!$user) {
-            $userId = $request->cookie('user_id');
-
-            if ($userId && ($user = User::find($userId))) {
+            if ($token && ($user = User::where('remember_token', $token)->first())) {
                 // Valid user from cookie
             } else {
-                // No valid authentication - return 401
-                return response()->json(['message' => 'Unauthorized'], 401);
+                // No cookie - create a new user and set cookie
+                $token = Str::random(60);
+                $user = User::create([
+                    'name' => 'Anonymous User',
+                    'email' => 'anonymous-' . Str::random(10) . '@example.com',
+                    'password' => Hash::make(Str::random(10)),
+                    'remember_token' => $token,
+                ]);
+
+                // Return response with cookie set
+                $response = $next($request->merge(['user' => $user]));
+                return $response->withCookie(cookie('auth_token', $token, 60 * 24 * 30)); // 30 days
             }
         }
 

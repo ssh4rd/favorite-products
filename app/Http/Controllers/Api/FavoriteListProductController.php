@@ -66,10 +66,6 @@ class FavoriteListProductController extends Controller
         $user = $request->user;
         $product = $this->favoriteListProductService->addProductToList($user->id, (int) $listId, $request->sku);
 
-        if (!$product) {
-            abort(404);
-        }
-
         return response()->json($product, 201);
     }
 
@@ -113,11 +109,7 @@ class FavoriteListProductController extends Controller
     public function destroy(Request $request, string $listId, string $sku): JsonResponse
     {
         $user = $request->user;
-        $success = $this->favoriteListProductService->removeProductFromList($user->id, (int) $listId, $sku);
-
-        if (!$success) {
-            abort(404);
-        }
+        $this->favoriteListProductService->removeProductFromList($user->id, (int) $listId, $sku);
 
         return response()->json(['message' => 'Product removed from list']);
     }

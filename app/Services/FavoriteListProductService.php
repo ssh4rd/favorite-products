@@ -11,13 +11,13 @@ readonly class FavoriteListProductService
         private FavoriteListProductRepository $favoriteListProductRepository
     ) {}
 
-    public function addProductToList(int $userId, int $listId, string $sku): ?FavoriteListProductData
+    public function addProductToList(int $userId, int $listId, string $sku): FavoriteListProductData
     {
         return $this->favoriteListProductRepository->addProductToList($userId, $listId, $sku);
     }
 
-    public function removeProductFromList(int $userId, int $listId, string $sku): bool
+    public function removeProductFromList(int $userId, int $listId, string $sku): void
     {
-        return $this->favoriteListProductRepository->removeProductFromList($userId, $listId, $sku);
+        $this->favoriteListProductRepository->removeProductFromList($userId, $listId, $sku);
     }
 }

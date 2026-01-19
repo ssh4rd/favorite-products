@@ -6,6 +6,7 @@ use App\Models\FavoriteList;
 use App\Data\FavoriteListData;
 use App\Data\FavoriteListWithProductsData;
 use App\Services\ProductService;
+use App\Exceptions\FavoriteListNotFoundException;
 use Illuminate\Support\Collection;
 
 readonly class FavoriteListRepository
@@ -21,11 +22,15 @@ readonly class FavoriteListRepository
         return $lists->map(fn($list) => FavoriteListData::from($list));
     }
 
-    public function findForUser(int $userId, int $listId): ?FavoriteListData
+    public function findForUser(int $userId, int $listId): FavoriteListData
     {
         $list = FavoriteList::where('user_id', $userId)->find($listId);
 
-        return $list ? FavoriteListData::from($list) : null;
+        if (!$list) {
+            throw new FavoriteListNotFoundException((string) $listId);
+        }
+
+        return FavoriteListData::from($list);
     }
 
     public function createForUser(int $userId, string $name): FavoriteListData
@@ -38,12 +43,12 @@ readonly class FavoriteListRepository
         return FavoriteListData::from($list);
     }
 
-    public function updateForUser(int $userId, int $listId, string $name): ?FavoriteListData
+    public function updateForUser(int $userId, int $listId, string $name): FavoriteListData
     {
         $list = FavoriteList::where('user_id', $userId)->find($listId);
 
         if (!$list) {
-            return null;
+            throw new FavoriteListNotFoundException((string) $listId);
         }
 
         $list->update(['name' => $name]);
@@ -51,25 +56,23 @@ readonly class FavoriteListRepository
         return FavoriteListData::from($list);
     }
 
-    public function deleteForUser(int $userId, int $listId): bool
+    public function deleteForUser(int $userId, int $listId): void
     {
         $list = FavoriteList::where('user_id', $userId)->find($listId);
 
         if (!$list) {
-            return false;
+            throw new FavoriteListNotFoundException((string) $listId);
         }
 
         $list->delete();
-
-        return true;
     }
 
-    public function getWithProductsForUser(int $userId, int $listId): ?FavoriteListWithProductsData
+    public function getWithProductsForUser(int $userId, int $listId): FavoriteListWithProductsData
     {
         $list = FavoriteList::where('user_id', $userId)->find($listId);
 
         if (!$list) {
-            return null;
+            throw new FavoriteListNotFoundException((string) $listId);
         }
 
         $products = $list->products->map(function ($listProduct) {

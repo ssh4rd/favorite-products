@@ -5,15 +5,17 @@ namespace App\Repositories;
 use App\Models\FavoriteList;
 use App\Models\FavoriteListProduct;
 use App\Data\FavoriteListProductData;
+use App\Exceptions\FavoriteListNotFoundException;
+use App\Exceptions\ProductNotFoundException;
 
 readonly class FavoriteListProductRepository
 {
-    public function addProductToList(int $userId, int $listId, string $sku): ?FavoriteListProductData
+    public function addProductToList(int $userId, int $listId, string $sku): FavoriteListProductData
     {
         $list = FavoriteList::where('user_id', $userId)->find($listId);
 
         if (!$list) {
-            return null;
+            throw new FavoriteListNotFoundException((string) $listId);
         }
 
         $product = FavoriteListProduct::firstOrCreate([
@@ -24,12 +26,12 @@ readonly class FavoriteListProductRepository
         return FavoriteListProductData::from($product);
     }
 
-    public function removeProductFromList(int $userId, int $listId, string $sku): bool
+    public function removeProductFromList(int $userId, int $listId, string $sku): void
     {
         $list = FavoriteList::where('user_id', $userId)->find($listId);
 
         if (!$list) {
-            return false;
+            throw new FavoriteListNotFoundException((string) $listId);
         }
 
         $product = FavoriteListProduct::where('favorite_list_id', $list->id)
@@ -37,11 +39,9 @@ readonly class FavoriteListProductRepository
             ->first();
 
         if (!$product) {
-            return false;
+            throw new ProductNotFoundException($sku);
         }
 
         $product->delete();
-
-        return true;
     }
 }

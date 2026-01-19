@@ -18,12 +18,12 @@ readonly class FavoriteListService
         return $this->favoriteListRepository->getAllForUser($userId);
     }
 
-    public function getByIdForUser(int $userId, int $listId): ?FavoriteListData
+    public function getByIdForUser(int $userId, int $listId): FavoriteListData
     {
         return $this->favoriteListRepository->findForUser($userId, $listId);
     }
 
-    public function getWithProductsForUser(int $userId, int $listId): ?FavoriteListWithProductsData
+    public function getWithProductsForUser(int $userId, int $listId): FavoriteListWithProductsData
     {
         return $this->favoriteListRepository->getWithProductsForUser($userId, $listId);
     }
@@ -33,13 +33,13 @@ readonly class FavoriteListService
         return $this->favoriteListRepository->createForUser($userId, $name);
     }
 
-    public function updateForUser(int $userId, int $listId, string $name): ?FavoriteListData
+    public function updateForUser(int $userId, int $listId, string $name): FavoriteListData
     {
         return $this->favoriteListRepository->updateForUser($userId, $listId, $name);
     }
 
-    public function deleteForUser(int $userId, int $listId): bool
+    public function deleteForUser(int $userId, int $listId): void
     {
-        return $this->favoriteListRepository->deleteForUser($userId, $listId);
+        $this->favoriteListRepository->deleteForUser($userId, $listId);
     }
 }

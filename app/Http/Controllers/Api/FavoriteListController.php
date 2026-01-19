@@ -133,10 +133,6 @@ class FavoriteListController extends Controller
         $user = $request->user;
         $data = $this->favoriteListService->getWithProductsForUser($user->id, (int) $id);
 
-        if (!$data) {
-            abort(404);
-        }
-
         return response()->json($data);
     }
 
@@ -185,10 +181,6 @@ class FavoriteListController extends Controller
         $user = $request->user;
         $list = $this->favoriteListService->updateForUser($user->id, (int) $id, $request->name);
 
-        if (!$list) {
-            abort(404);
-        }
-
         return response()->json($list);
     }
 
@@ -225,11 +217,7 @@ class FavoriteListController extends Controller
     public function destroy(Request $request, string $id): JsonResponse
     {
         $user = $request->user;
-        $success = $this->favoriteListService->deleteForUser($user->id, (int) $id);
-
-        if (!$success) {
-            abort(404);
-        }
+        $this->favoriteListService->deleteForUser($user->id, (int) $id);
 
         return response()->json(['message' => 'List deleted']);
     }

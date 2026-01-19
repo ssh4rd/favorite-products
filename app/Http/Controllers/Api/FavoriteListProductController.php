@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Attributes as OA;
 use App\Services\FavoriteListProductService;
+use App\Http\Requests\AddProductToListRequest;
 use Illuminate\Http\Request;
 
 #[OA\Tag(
@@ -29,12 +30,7 @@ class FavoriteListProductController extends Controller
         security: [["sanctum" => []]],
         requestBody: new OA\RequestBody(
             required: true,
-            content: new OA\JsonContent(
-                required: ["sku"],
-                properties: [
-                    new OA\Property(property: "sku", type: "string", example: "ABC123")
-                ]
-            )
+            content: new OA\JsonContent(ref: "#/components/schemas/AddProductToListRequest")
         ),
         tags: ["Favorite List Products"],
         parameters: [
@@ -57,13 +53,9 @@ class FavoriteListProductController extends Controller
             new OA\Response(response: 422, description: "Validation error")
         ]
     )]
-    public function store(Request $request, string $listId): JsonResponse
+    public function store(AddProductToListRequest $request, Request $httpRequest, string $listId): JsonResponse
     {
-        $request->validate([
-            'sku' => 'required|string',
-        ]);
-
-        $user = $request->user;
+        $user = $httpRequest->user;
         $product = $this->favoriteListProductService->addProductToList($user->id, (int) $listId, $request->sku);
 
         return response()->json($product, 201);

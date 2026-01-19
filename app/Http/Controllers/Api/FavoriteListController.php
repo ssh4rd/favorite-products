@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Attributes as OA;
 use App\Services\FavoriteListService;
+use App\Http\Requests\CreateFavoriteListRequest;
+use App\Http\Requests\UpdateFavoriteListRequest;
 use Illuminate\Http\Request;
 
 #[OA\Info(
@@ -72,12 +74,7 @@ class FavoriteListController extends Controller
         security: [["sanctum" => []]],
         requestBody: new OA\RequestBody(
             required: true,
-            content: new OA\JsonContent(
-                required: ["name"],
-                properties: [
-                    new OA\Property(property: "name", type: "string", example: "My Favorites")
-                ]
-            )
+            content: new OA\JsonContent(ref: "#/components/schemas/CreateFavoriteListRequest")
         ),
         tags: ["Favorite Lists"],
         responses: [
@@ -90,13 +87,9 @@ class FavoriteListController extends Controller
             new OA\Response(response: 422, description: "Validation error")
         ]
     )]
-    public function store(Request $request): JsonResponse
+    public function store(CreateFavoriteListRequest $request, Request $httpRequest): JsonResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
-
-        $user = $request->user;
+        $user = $httpRequest->user;
         $list = $this->favoriteListService->createForUser($user->id, $request->name);
 
         return response()->json($list, 201);
@@ -144,12 +137,7 @@ class FavoriteListController extends Controller
         security: [["sanctum" => []]],
         requestBody: new OA\RequestBody(
             required: true,
-            content: new OA\JsonContent(
-                required: ["name"],
-                properties: [
-                    new OA\Property(property: "name", type: "string", example: "Updated Favorites")
-                ]
-            )
+            content: new OA\JsonContent(ref: "#/components/schemas/UpdateFavoriteListRequest")
         ),
         tags: ["Favorite Lists"],
         parameters: [
@@ -172,13 +160,9 @@ class FavoriteListController extends Controller
             new OA\Response(response: 422, description: "Validation error")
         ]
     )]
-    public function update(Request $request, string $id)
+    public function update(UpdateFavoriteListRequest $request, Request $httpRequest, string $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
-
-        $user = $request->user;
+        $user = $httpRequest->user;
         $list = $this->favoriteListService->updateForUser($user->id, (int) $id, $request->name);
 
         return response()->json($list);

@@ -24,14 +24,6 @@ use Illuminate\Http\Request;
     description: "Local development server"
 )]
 
-#[OA\SecurityScheme(
-    securityScheme: "sanctum",
-    type: "apiKey",
-    description: "Enter token in format (Bearer <token>)",
-    name: "Authorization",
-    in: "header"
-)]
-
 class FavoriteListController extends Controller
 {
     public function __construct(
@@ -43,7 +35,6 @@ class FavoriteListController extends Controller
         operationId: "getFavoriteLists",
         description: "Retrieve all favorite lists for the authenticated user",
         summary: "Get user's favorite lists",
-        security: [["sanctum" => []]],
         tags: ["Favorite Lists"],
         responses: [
             new OA\Response(
@@ -53,8 +44,7 @@ class FavoriteListController extends Controller
                     type: "array",
                     items: new OA\Items(ref: "#/components/schemas/FavoriteList")
                 )
-            ),
-            new OA\Response(response: 401, description: "Unauthorized")
+            )
         ]
     )]
     public function index(Request $request): JsonResponse
@@ -70,7 +60,6 @@ class FavoriteListController extends Controller
         operationId: "createFavoriteList",
         description: "Create a new favorite list for the authenticated user",
         summary: "Create a new favorite list",
-        security: [["sanctum" => []]],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(ref: "#/components/schemas/CreateFavoriteListRequest")
@@ -82,7 +71,6 @@ class FavoriteListController extends Controller
                 description: "Favorite list created",
                 content: new OA\JsonContent(ref: "#/components/schemas/FavoriteList")
             ),
-            new OA\Response(response: 401, description: "Unauthorized"),
             new OA\Response(response: 422, description: "Validation error")
         ]
     )]
@@ -102,7 +90,6 @@ class FavoriteListController extends Controller
         operationId: "getFavoriteList",
         description: "Retrieve a specific favorite list with its products",
         summary: "Get favorite list with products",
-        security: [["sanctum" => []]],
         tags: ["Favorite Lists"],
         parameters: [
             new OA\Parameter(
@@ -119,8 +106,7 @@ class FavoriteListController extends Controller
                 description: "Favorite list with products",
                 content: new OA\JsonContent(ref: "#/components/schemas/FavoriteListWithProducts")
             ),
-            new OA\Response(response: 404, description: "List not found"),
-            new OA\Response(response: 401, description: "Unauthorized")
+            new OA\Response(response: 404, description: "List not found")
         ]
     )]
     public function show(Request $request, string $id)
@@ -139,7 +125,6 @@ class FavoriteListController extends Controller
         operationId: "updateFavoriteList",
         description: "Update the name of a specific favorite list",
         summary: "Update favorite list",
-        security: [["sanctum" => []]],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(ref: "#/components/schemas/UpdateFavoriteListRequest")
@@ -161,7 +146,6 @@ class FavoriteListController extends Controller
                 content: new OA\JsonContent(ref: "#/components/schemas/FavoriteList")
             ),
             new OA\Response(response: 404, description: "List not found"),
-            new OA\Response(response: 401, description: "Unauthorized"),
             new OA\Response(response: 422, description: "Validation error")
         ]
     )]
@@ -181,7 +165,6 @@ class FavoriteListController extends Controller
         operationId: "deleteFavoriteList",
         description: "Soft delete a specific favorite list",
         summary: "Delete favorite list",
-        security: [["sanctum" => []]],
         tags: ["Favorite Lists"],
         parameters: [
             new OA\Parameter(
@@ -202,8 +185,7 @@ class FavoriteListController extends Controller
                     ]
                 )
             ),
-            new OA\Response(response: 404, description: "List not found"),
-            new OA\Response(response: 401, description: "Unauthorized")
+            new OA\Response(response: 404, description: "List not found")
         ]
     )]
     public function destroy(Request $request, string $id): JsonResponse

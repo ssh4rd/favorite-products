@@ -29,7 +29,6 @@ class FavoriteListProductController extends Controller
         operationId: "addProductToList",
         description: "Add a product to a specific favorite list",
         summary: "Add product to favorite list",
-        security: [["sanctum" => []]],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(ref: "#/components/schemas/AddProductToListRequest")
@@ -51,7 +50,6 @@ class FavoriteListProductController extends Controller
                 content: new OA\JsonContent(ref: "#/components/schemas/FavoriteListProduct")
             ),
             new OA\Response(response: 404, description: "List not found"),
-            new OA\Response(response: 401, description: "Unauthorized"),
             new OA\Response(response: 422, description: "Validation error")
         ]
     )]
@@ -75,7 +73,6 @@ class FavoriteListProductController extends Controller
         operationId: "removeProductFromList",
         description: "Remove a product from a specific favorite list",
         summary: "Remove product from favorite list",
-        security: [["sanctum" => []]],
         tags: ["Favorite List Products"],
         parameters: [
             new OA\Parameter(
@@ -103,8 +100,7 @@ class FavoriteListProductController extends Controller
                     ]
                 )
             ),
-            new OA\Response(response: 404, description: "List or product not found"),
-            new OA\Response(response: 401, description: "Unauthorized")
+            new OA\Response(response: 404, description: "List or product not found")
         ]
     )]
     public function destroy(Request $request, string $listId, string $sku): JsonResponse

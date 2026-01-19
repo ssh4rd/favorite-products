@@ -7,8 +7,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Attributes as OA;
-use App\Models\FavoriteList;
-use App\Models\FavoriteListProduct;
+use App\Services\FavoriteListProductService;
 use Illuminate\Http\Request;
 
 #[OA\Tag(
@@ -18,6 +17,10 @@ use Illuminate\Http\Request;
 
 class FavoriteListProductController extends Controller
 {
+    public function __construct(
+        private readonly FavoriteListProductService $favoriteListProductService
+    ) {}
+
     #[OA\Post(
         path: "/api/lists/{listId}/products",
         operationId: "addProductToList",
@@ -61,12 +64,11 @@ class FavoriteListProductController extends Controller
         ]);
 
         $user = $request->user;
-        $list = FavoriteList::where('user_id', $user->id)->findOrFail($listId);
+        $product = $this->favoriteListProductService->addProductToList($user->id, (int) $listId, $request->sku);
 
-        $product = FavoriteListProduct::firstOrCreate([
-            'favorite_list_id' => $list->id,
-            'sku' => $request->sku,
-        ]);
+        if (!$product) {
+            abort(404);
+        }
 
         return response()->json($product, 201);
     }
@@ -111,13 +113,11 @@ class FavoriteListProductController extends Controller
     public function destroy(Request $request, string $listId, string $sku): JsonResponse
     {
         $user = $request->user;
-        $list = FavoriteList::where('user_id', $user->id)->findOrFail($listId);
+        $success = $this->favoriteListProductService->removeProductFromList($user->id, (int) $listId, $sku);
 
-        $product = FavoriteListProduct::where('favorite_list_id', $list->id)
-            ->where('sku', $sku)
-            ->firstOrFail();
-
-        $product->delete();
+        if (!$success) {
+            abort(404);
+        }
 
         return response()->json(['message' => 'Product removed from list']);
     }

@@ -7,8 +7,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Attributes as OA;
-use App\Models\FavoriteList;
-use App\Services\ProductService;
+use App\Services\FavoriteListService;
 use Illuminate\Http\Request;
 
 #[OA\Info(
@@ -69,7 +68,7 @@ use Illuminate\Http\Request;
 class FavoriteListController extends Controller
 {
     public function __construct(
-        private readonly ProductService $productService
+        private readonly FavoriteListService $favoriteListService
     ) {}
 
     #[OA\Get(
@@ -94,7 +93,7 @@ class FavoriteListController extends Controller
     public function index(Request $request): JsonResponse
     {
         $user = $request->user;
-        $lists = FavoriteList::where('user_id', $user->id)->get();
+        $lists = $this->favoriteListService->getAllForUser($user->id);
 
         return response()->json($lists);
     }
@@ -132,10 +131,7 @@ class FavoriteListController extends Controller
         ]);
 
         $user = $request->user;
-        $list = FavoriteList::create([
-            'user_id' => $user->id,
-            'name' => $request->name,
-        ]);
+        $list = $this->favoriteListService->createForUser($user->id, $request->name);
 
         return response()->json($list, 201);
     }
@@ -174,16 +170,13 @@ class FavoriteListController extends Controller
     public function show(Request $request, string $id)
     {
         $user = $request->user;
-        $list = FavoriteList::where('user_id', $user->id)->findOrFail($id);
+        $data = $this->favoriteListService->getWithProductsForUser($user->id, (int) $id);
 
-        $products = $list->products->map(function ($listProduct) {
-            return $this->productService->getProductBySku($listProduct->sku);
-        });
+        if (!$data) {
+            abort(404);
+        }
 
-        return response()->json([
-            'list' => $list,
-            'products' => $products,
-        ]);
+        return response()->json($data);
     }
 
     #[OA\Put(
@@ -229,9 +222,11 @@ class FavoriteListController extends Controller
         ]);
 
         $user = $request->user;
-        $list = FavoriteList::where('user_id', $user->id)->findOrFail($id);
+        $list = $this->favoriteListService->updateForUser($user->id, (int) $id, $request->name);
 
-        $list->update(['name' => $request->name]);
+        if (!$list) {
+            abort(404);
+        }
 
         return response()->json($list);
     }
@@ -269,9 +264,11 @@ class FavoriteListController extends Controller
     public function destroy(Request $request, string $id): JsonResponse
     {
         $user = $request->user;
-        $list = FavoriteList::where('user_id', $user->id)->findOrFail($id);
+        $success = $this->favoriteListService->deleteForUser($user->id, (int) $id);
 
-        $list->delete(); // Soft delete
+        if (!$success) {
+            abort(404);
+        }
 
         return response()->json(['message' => 'List deleted']);
     }

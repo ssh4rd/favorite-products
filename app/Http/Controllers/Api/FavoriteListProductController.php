@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\FavoriteListNotFoundException;
+use App\Exceptions\ProductNotFoundException;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Attributes as OA;
@@ -53,6 +55,9 @@ class FavoriteListProductController extends Controller
             new OA\Response(response: 422, description: "Validation error")
         ]
     )]
+    /**
+     * @throws FavoriteListNotFoundException
+     */
     public function store(AddProductToListRequest $request, Request $httpRequest, string $listId): JsonResponse
     {
         $user = $httpRequest->user;
@@ -61,6 +66,10 @@ class FavoriteListProductController extends Controller
         return response()->json($product, 201);
     }
 
+    /**
+     * @throws FavoriteListNotFoundException
+     * @throws ProductNotFoundException
+     */
     #[OA\Delete(
         path: "/api/lists/{listId}/products/{sku}",
         operationId: "removeProductFromList",

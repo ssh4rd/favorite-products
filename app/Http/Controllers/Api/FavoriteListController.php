@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\FavoriteListNotFoundException;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Attributes as OA;
@@ -22,8 +23,6 @@ use Illuminate\Http\Request;
     url: "http://localhost:8000",
     description: "Local development server"
 )]
-
-
 
 #[OA\SecurityScheme(
     securityScheme: "sanctum",
@@ -95,6 +94,9 @@ class FavoriteListController extends Controller
         return response()->json($list, 201);
     }
 
+    /**
+     * @throws FavoriteListNotFoundException
+     */
     #[OA\Get(
         path: "/api/lists/{id}",
         operationId: "getFavoriteList",
@@ -129,6 +131,9 @@ class FavoriteListController extends Controller
         return response()->json($data);
     }
 
+    /**
+     * @throws FavoriteListNotFoundException
+     */
     #[OA\Put(
         path: "/api/lists/{id}",
         operationId: "updateFavoriteList",
@@ -168,6 +173,9 @@ class FavoriteListController extends Controller
         return response()->json($list);
     }
 
+    /**
+     * @throws FavoriteListNotFoundException
+     */
     #[OA\Delete(
         path: "/api/lists/{id}",
         operationId: "deleteFavoriteList",

@@ -10,6 +10,9 @@ use App\Exceptions\ProductNotFoundException;
 
 readonly class FavoriteListProductRepository
 {
+    /**
+     * @throws FavoriteListNotFoundException
+     */
     public function addProductToList(int $userId, int $listId, string $sku): FavoriteListProductData
     {
         $list = FavoriteList::where('user_id', $userId)->find($listId);
@@ -26,6 +29,10 @@ readonly class FavoriteListProductRepository
         return FavoriteListProductData::from($product);
     }
 
+    /**
+     * @throws FavoriteListNotFoundException
+     * @throws ProductNotFoundException
+     */
     public function removeProductFromList(int $userId, int $listId, string $sku): void
     {
         $list = FavoriteList::where('user_id', $userId)->find($listId);

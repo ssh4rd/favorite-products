@@ -15,6 +15,9 @@ readonly class FavoriteListRepository
         private ProductService $productService
     ) {}
 
+    /**
+     * @return Collection<int, FavoriteListData>
+     */
     public function getAllForUser(int $userId): Collection
     {
         $lists = FavoriteList::where('user_id', $userId)->get();
@@ -22,6 +25,9 @@ readonly class FavoriteListRepository
         return $lists->map(fn($list) => FavoriteListData::from($list));
     }
 
+    /**
+     * @throws FavoriteListNotFoundException
+     */
     public function findForUser(int $userId, int $listId): FavoriteListData
     {
         $list = FavoriteList::where('user_id', $userId)->find($listId);
@@ -43,6 +49,9 @@ readonly class FavoriteListRepository
         return FavoriteListData::from($list);
     }
 
+    /**
+     * @throws FavoriteListNotFoundException
+     */
     public function updateForUser(int $userId, int $listId, string $name): FavoriteListData
     {
         $list = FavoriteList::where('user_id', $userId)->find($listId);
@@ -56,6 +65,9 @@ readonly class FavoriteListRepository
         return FavoriteListData::from($list);
     }
 
+    /**
+     * @throws FavoriteListNotFoundException
+     */
     public function deleteForUser(int $userId, int $listId): void
     {
         $list = FavoriteList::where('user_id', $userId)->find($listId);
@@ -67,6 +79,9 @@ readonly class FavoriteListRepository
         $list->delete();
     }
 
+    /**
+     * @throws FavoriteListNotFoundException
+     */
     public function getWithProductsForUser(int $userId, int $listId): FavoriteListWithProductsData
     {
         $list = FavoriteList::where('user_id', $userId)->find($listId);

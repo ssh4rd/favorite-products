@@ -21,41 +21,7 @@ use Illuminate\Http\Request;
     description: "Local development server"
 )]
 
-#[OA\Schema(
-    schema: "FavoriteList",
-    properties: [
-        new OA\Property(property: "id", type: "integer", example: 1),
-        new OA\Property(property: "user_id", type: "integer", example: 1),
-        new OA\Property(property: "name", type: "string", example: "My Favorites"),
-        new OA\Property(property: "is_default", type: "boolean", example: false),
-        new OA\Property(property: "created_at", type: "string", format: "date-time"),
-        new OA\Property(property: "updated_at", type: "string", format: "date-time")
-    ],
-    type: "object"
-)]
 
-#[OA\Schema(
-    schema: "FavoriteListProduct",
-    properties: [
-        new OA\Property(property: "id", type: "integer", example: 1),
-        new OA\Property(property: "favorite_list_id", type: "integer", example: 1),
-        new OA\Property(property: "sku", type: "string", example: "ABC123"),
-        new OA\Property(property: "created_at", type: "string", format: "date-time"),
-        new OA\Property(property: "updated_at", type: "string", format: "date-time")
-    ],
-    type: "object"
-)]
-
-#[OA\Schema(
-    schema: "Product",
-    properties: [
-        new OA\Property(property: "sku", type: "string", example: "ABC123"),
-        new OA\Property(property: "name", type: "string", example: "Sample Product"),
-        new OA\Property(property: "price", type: "number", format: "float", example: 99.99),
-        new OA\Property(property: "description", type: "string", example: "A great product")
-    ],
-    type: "object"
-)]
 
 #[OA\SecurityScheme(
     securityScheme: "sanctum",
@@ -156,12 +122,7 @@ class FavoriteListController extends Controller
             new OA\Response(
                 response: 200,
                 description: "Favorite list with products",
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: "list", ref: "#/components/schemas/FavoriteList"),
-                        new OA\Property(property: "products", type: "array", items: new OA\Items(ref: "#/components/schemas/Product"))
-                    ]
-                )
+                content: new OA\JsonContent(ref: "#/components/schemas/FavoriteListWithProducts")
             ),
             new OA\Response(response: 404, description: "List not found"),
             new OA\Response(response: 401, description: "Unauthorized")

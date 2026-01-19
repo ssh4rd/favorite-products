@@ -120,18 +120,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "list": {
-                                            "$ref": "#/components/schemas/FavoriteList"
-                                        },
-                                        "products": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/Product"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/FavoriteListWithProducts"
                                 }
                             }
                         }
@@ -396,7 +385,7 @@
                         "type": "integer",
                         "example": 1
                     },
-                    "user_id": {
+                    "userId": {
                         "type": "integer",
                         "example": 1
                     },
@@ -404,15 +393,11 @@
                         "type": "string",
                         "example": "My Favorites"
                     },
-                    "is_default": {
-                        "type": "boolean",
-                        "example": false
-                    },
-                    "created_at": {
+                    "createdAt": {
                         "type": "string",
                         "format": "date-time"
                     },
-                    "updated_at": {
+                    "updatedAt": {
                         "type": "string",
                         "format": "date-time"
                     }
@@ -425,7 +410,7 @@
                         "type": "integer",
                         "example": 1
                     },
-                    "favorite_list_id": {
+                    "favoriteListId": {
                         "type": "integer",
                         "example": 1
                     },
@@ -433,13 +418,27 @@
                         "type": "string",
                         "example": "ABC123"
                     },
-                    "created_at": {
+                    "createdAt": {
                         "type": "string",
                         "format": "date-time"
                     },
-                    "updated_at": {
+                    "updatedAt": {
                         "type": "string",
                         "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "FavoriteListWithProducts": {
+                "properties": {
+                    "list": {
+                        "$ref": "#/components/schemas/FavoriteList"
+                    },
+                    "products": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Product"
+                        }
                     }
                 },
                 "type": "object"
@@ -455,13 +454,21 @@
                         "example": "Sample Product"
                     },
                     "price": {
-                        "type": "number",
-                        "format": "float",
-                        "example": 99.99
+                        "type": "string",
+                        "format": "decimal",
+                        "example": "99.99"
+                    },
+                    "category": {
+                        "type": "string",
+                        "example": "Electronics"
                     },
                     "description": {
                         "type": "string",
                         "example": "A great product"
+                    },
+                    "inStock": {
+                        "type": "boolean",
+                        "example": true
                     }
                 },
                 "type": "object"

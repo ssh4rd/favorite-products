@@ -71,6 +71,7 @@ If this is your first time running the application or you want a completely fres
 ### Access Points
 
 - **Web Application:** http://localhost:8000
+- **API Documentation (Swagger/OpenAPI):** http://localhost:8000/api/documentation
 - **Database:** localhost:3306 (user: `favorite_user`, password: `favorite_password`)
 - **Redis:** localhost:6379
 

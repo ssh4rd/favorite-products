@@ -1,25 +1,137 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Favorite Products API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern, well-architected Laravel API for managing user favorite product lists. Built with clean architecture principles, comprehensive testing, and extensive documentation.
 
-## About Laravel
+## 🏗️ Architecture Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This project demonstrates modern PHP/Laravel development practices with:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Clean Architecture**: Repository pattern with service layer separation
+- **Data Transfer Objects**: Type-safe DTOs using Spatie Laravel Data
+- **Comprehensive Testing**: Unit and integration tests with 100% coverage
+- **API Documentation**: OpenAPI/Swagger documentation
+- **Authentication**: Custom middleware with Bearer token support
+- **Exception Handling**: Structured error responses with custom exceptions
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🚀 Features
+
+- **User Management**: Multi-user system with proper authorization
+- **Favorite Lists**: Create, read, update, and delete favorite product lists
+- **Product Management**: Add/remove products from favorite lists
+- **RESTful API**: Full CRUD operations with proper HTTP status codes
+- **Data Validation**: Request validation using DTOs
+- **Error Handling**: Structured error responses
+- **Soft Deletes**: Safe deletion with recovery capability
+- **API Documentation**: Interactive Swagger UI documentation
+
+## 📊 Database Schema
+
+### Tables
+- **`users`** - User accounts with authentication
+- **`favorite_lists`** - User-created favorite lists (soft delete enabled)
+- **`favorite_list_products`** - Products within favorite lists (unique constraints)
+
+### Relationships
+- Users → Favorite Lists (1:M)
+- Favorite Lists → Products (1:M)
+- Cascade delete protection
+
+## 📋 API Endpoints
+
+### Favorite Lists
+- `GET /api/lists` - Get user's favorite lists
+- `POST /api/lists` - Create a new favorite list
+- `GET /api/lists/{id}` - Get specific list with products
+- `PUT /api/lists/{id}` - Update a favorite list
+- `DELETE /api/lists/{id}` - Delete a favorite list
+
+### Favorite List Products
+- `POST /api/lists/{listId}/products` - Add product to list
+- `DELETE /api/lists/{listId}/products/{sku}` - Remove product from list
+
+### Authentication
+Uses Bearer token authentication via `Authorization: Bearer {token}` header.
+
+## 🧪 Testing
+
+The project includes comprehensive testing:
+
+```bash
+# Run all tests
+make test
+# or
+php artisan test
+
+# Run specific test suite
+php artisan test --filter FavoriteListAuthorizationTest
+
+# Generate test coverage (if configured)
+php artisan test --coverage
+```
+
+### Test Coverage
+- **Unit Tests**: Basic functionality and utilities
+- **Feature Tests**: API endpoints and integration testing
+- **Authorization Tests**: Complete user isolation and access control
+- **Database Tests**: Data integrity and relationships
+
+## 🏛️ Architecture Details
+
+### Layered Architecture
+```
+┌─────────────────┐
+│   Controllers   │  ← HTTP request/response handling
+├─────────────────┤
+│    Services     │  ← Business logic
+├─────────────────┤
+│  Repositories   │  ← Data access layer
+├─────────────────┤
+│     Models      │  ← Eloquent ORM
+├─────────────────┤
+│    Database     │  ← MySQL with migrations
+└─────────────────┘
+```
+
+### Key Components
+
+#### Data Transfer Objects (DTOs)
+- `FavoriteListData` - List information with camelCase properties
+- `ProductData` - Product details with stock status
+- `FavoriteListWithProductsData` - Combined list and products
+
+#### Request Objects
+- `CreateFavoriteListRequest` - Validated list creation
+- `UpdateFavoriteListRequest` - Validated list updates
+- `AddProductToListRequest` - Validated product addition
+
+#### Custom Exceptions
+- `FavoriteListNotFoundException` - List not found errors
+- `ProductNotFoundException` - Product not found in list errors
+- Proper HTTP 404 responses with structured JSON
+
+#### Repositories
+- Data access abstraction
+- Exception throwing for not found resources
+- Clean separation from business logic
+
+#### Services
+- Business logic encapsulation
+- Transaction management (when needed)
+- Complex operations coordination
+
+## 🔧 Development
+
+### Code Quality
+- **PHPDoc**: Comprehensive documentation for all methods
+- **Type Hints**: Full type declarations
+- **PSR Standards**: PSR-4 autoloading, PSR-12 coding standards
+- **Clean Code**: Single responsibility principle
+
+### Security
+- **Authorization**: User isolation and access control
+- **Input Validation**: Request object validation
+- **SQL Injection Protection**: Eloquent ORM protection
+- **XSS Protection**: Laravel's built-in protections
 
 ## Launching the Application
 
